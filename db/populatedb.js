@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS cat_items (
       ON DELETE CASCADE
       ON UPDATE CASCADE
 );
+
 `;
 
 async function main() {

@@ -6,9 +6,7 @@ const viewItems = async (req, res) => {
 };
 const viewItemDetails = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const item = await db.viewItemDetails(id);
-  console.log(item);
   res.render('item', { title: 'Item Details', item });
 };
 const addItemGET = async (req, res) => {

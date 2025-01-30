@@ -16,7 +16,11 @@
         Categories:
         <ul>
           <% item.categories.forEach((category) => { %>
-          <li><%= category %></li>
+          <li>
+            <a href="/categories/<%= category.cid%>/get"
+              ><%= category.ctitle %></a
+            >
+          </li>
           <% }); %>
         </ul>
       </div>

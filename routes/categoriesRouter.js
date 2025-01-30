@@ -5,6 +5,7 @@ const categoriesRouter = Router();
 const categoriesController = require('../controllers/categoriesController');
 
 categoriesRouter.get('/', categoriesController.viewCategories);
+categoriesRouter.get('/:id/get', categoriesController.viewCategoryDetails);
 
 categoriesRouter.get('/new', categoriesController.addCategoryGET);
 categoriesRouter.post('/new', categoriesController.addCategoryPOST);

@@ -12,6 +12,11 @@ const viewCategories = async (req, res) => {
   const categories = await db.viewAllCategories();
   res.render('categories', { title: 'Categories', categories });
 };
+const viewCategoryDetails = async (req, res) => {
+  const { id } = req.params;
+  const category = await db.viewCategoryDetails(id);
+  res.render('category', { title: 'Category Details', category });
+};
 const updateCategoryGET = async (req, res) => {
   const { id } = req.params;
   const category = await db.getCategory(id);
@@ -33,6 +38,7 @@ module.exports = {
   addCategoryGET,
   addCategoryPOST,
   viewCategories,
+  viewCategoryDetails,
   updateCategoryGET,
   updateCategoryPOST,
   deleteCategory,

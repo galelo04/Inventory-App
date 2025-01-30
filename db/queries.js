@@ -6,6 +6,19 @@ const viewAllCategories = async () => {
   return rows;
 };
 
+const viewCategoryDetails = async (id) => {
+  const query = `
+    SELECT ctitle, 
+       ARRAY_AGG(JSON_BUILD_OBJECT('iid', i.iid, 'ititle', i.ititle)) AS items
+FROM categories c
+JOIN cat_items ci ON c.cid = ci.cid
+JOIN items i ON i.iid = ci.iid
+WHERE c.cid = $1
+GROUP BY c.ctitle;
+  `;
+  const { rows } = await pool.query(query, [id]);
+  return rows[0] || null;
+};
 const getCategory = async (id) => {
   const { rows } = await pool.query('SELECT * FROM categories WHERE cid=$1', [
     id,
@@ -34,12 +47,12 @@ const viewAllItems = async () => {
 const viewItemDetails = async (id) => {
   const query = `
     SELECT i.ititle, i.price, i.quantity, 
-           ARRAY_AGG(c.ctitle) AS categories
-    FROM items i
-    JOIN cat_items ci ON i.iid = ci.iid
-    JOIN categories c ON c.cid = ci.cid
-    WHERE i.iid = $1
-    GROUP BY i.ititle, i.price, i.quantity
+       ARRAY_AGG(JSON_BUILD_OBJECT('cid', c.cid, 'ctitle', c.ctitle)) AS categories
+FROM items i
+JOIN cat_items ci ON i.iid = ci.iid
+JOIN categories c ON c.cid = ci.cid
+WHERE i.iid = $1
+GROUP BY i.iid, i.ititle, i.price, i.quantity;
   `;
 
   const { rows } = await pool.query(query, [id]);
@@ -70,6 +83,7 @@ const addItem = async (title, price, quantity, categories) => {
 
 module.exports = {
   viewAllCategories,
+  viewCategoryDetails,
   addCategory,
   updateCategory,
   getCategory,

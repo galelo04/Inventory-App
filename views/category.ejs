@@ -7,13 +7,12 @@
   </head>
   <body>
     <h1><%=title%></h1>
-    <a href="/categories/new">create new category</a>
-    <ul>
-      <%if(categories){%> <% categories.forEach((category)=>{%>
-      <li>
-        <h2>category title: <%=category.ctitle%></h2>
-        <a href="/categories/<%=category.cid%>/update">update</a>
-      </li>
+    <a href="/">back to home</a>
+    <a href="/categories">all Categories</a>
+    <div>
+      <h2>category title: <%=category.ctitle%></h2>
+      <a href="/categories/<%=category.cid%>/update">update</a>
+
       <form
         action="/categories/<%= category.cid %>/delete"
         method="POST"
@@ -26,8 +25,11 @@
           Delete
         </button>
       </form>
-      <%})%> <%}%>
-    </ul>
-    <a href="/">back to home</a>
+    </div>
+    <div class="items">
+      Items in the category <%category.items.forEach((item)=>{%>
+      <li><a href="/items/<%= item.iid%>/get"><%= item.ititle%></a></li>
+      <%})%>
+    </div>
   </body>
 </html>

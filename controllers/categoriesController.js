@@ -6,6 +6,7 @@ const addCategoryGET = async (req, res) => {
 const addCategoryPOST = async (req, res) => {
   const { title } = req.body;
   await db.addCategory(title);
+  res.redirect('/categories');
 };
 const viewCategories = async (req, res) => {
   const categories = await db.viewAllCategories();
@@ -23,10 +24,16 @@ const updateCategoryPOST = async (req, res) => {
   await db.updateCategory(id, title);
   res.redirect('/categories');
 };
+const deleteCategory = async (req, res) => {
+  const { id } = req.params;
+  await db.deleteCategory(id);
+  res.redirect('/categories');
+};
 module.exports = {
   addCategoryGET,
   addCategoryPOST,
   viewCategories,
   updateCategoryGET,
   updateCategoryPOST,
+  deleteCategory,
 };

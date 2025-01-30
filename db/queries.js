@@ -20,9 +20,14 @@ const updateCategory = async (id, title) => {
   await pool.query('UPDATE categories SET ctitle=$1 WHERE cid=$2', [title, id]);
 };
 
+const deleteCategory = async (id) => {
+  await pool.query('DELETE FROM categories WHERE cid=$1', [id]);
+};
+
 module.exports = {
   viewAllCategories,
   addCategory,
   updateCategory,
   getCategory,
+  deleteCategory,
 };

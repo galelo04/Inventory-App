@@ -7,7 +7,6 @@
   </head>
   <body>
     <h1><%=title%></h1>
-    <a href="/">back to home</a>
     <a href="/categories/new">create new category</a>
     <ul>
       <%if(categories){%> <% categories.forEach((category)=>{%>
@@ -29,5 +28,6 @@
       </form>
       <%})%> <%}%>
     </ul>
+    <a href="/">back to home</a>
   </body>
 </html>

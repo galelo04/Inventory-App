@@ -3,6 +3,7 @@ const express = require('express');
 require('dotenv').config();
 const indexRouter = require('./routes/indexRouter');
 const categoriesRouter = require('./routes/categoriesRouter');
+const itemsRouter = require('./routes/itemsRouter');
 
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
 app.use('/categories', categoriesRouter);
+app.use('/items', itemsRouter);
 
 app.listen(process.env.SERVER_PORT || 3000, () => {
   console.log('listening...');

@@ -110,6 +110,10 @@ const updateItem = async (id, title, price, quantity, categories) => {
   }
 };
 
+const deleteItem = async (id) => {
+  await pool.query('DELETE FROM items WHERE iid=$1', [id]);
+};
+
 module.exports = {
   viewAllCategories,
   viewCategoryDetails,
@@ -121,4 +125,5 @@ module.exports = {
   viewItemDetails,
   addItem,
   updateItem,
+  deleteItem,
 };

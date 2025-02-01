@@ -40,6 +40,12 @@ const updateItemPOST = async (req, res) => {
   res.redirect('/items');
 };
 
+const deleteItem = async (req , res) => {
+  const {id} = req.params;
+  await db.deleteItem(id);
+  res.redirect('/items');
+}
+
 module.exports = {
   viewItems,
   viewItemDetails,
@@ -47,4 +53,5 @@ module.exports = {
   addItemPOST,
   updateItemGET,
   updateItemPOST,
+  deleteItem
 };

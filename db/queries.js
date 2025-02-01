@@ -8,13 +8,13 @@ const viewAllCategories = async () => {
 
 const viewCategoryDetails = async (id) => {
   const query = `
-    SELECT ctitle, 
+    SELECT ctitle,c.cid, 
        ARRAY_AGG(JSON_BUILD_OBJECT('iid', i.iid, 'ititle', i.ititle)) AS items
 FROM categories c
 JOIN cat_items ci ON c.cid = ci.cid
 JOIN items i ON i.iid = ci.iid
 WHERE c.cid = $1
-GROUP BY c.ctitle;
+GROUP BY c.ctitle,c.cid;
   `;
   const { rows } = await pool.query(query, [id]);
   return rows[0] || null;
@@ -46,7 +46,7 @@ const viewAllItems = async () => {
 };
 const viewItemDetails = async (id) => {
   const query = `
-    SELECT i.ititle, i.price, i.quantity, 
+    SELECT i.ititle, i.price, i.quantity,i.iid, 
        ARRAY_AGG(JSON_BUILD_OBJECT('cid', c.cid, 'ctitle', c.ctitle)) AS categories
 FROM items i
 JOIN cat_items ci ON i.iid = ci.iid
@@ -81,6 +81,35 @@ const addItem = async (title, price, quantity, categories) => {
   }
 };
 
+const updateItem = async (id, title, price, quantity, categories) => {
+  try {
+    await pool.query(
+      `UPDATE items SET ititle=$1, quantity=$2, price=$3 WHERE iid=$4`,
+      [title, quantity, price, id]
+    );
+
+    console.log(categories);
+
+    if (categories.length > 0) {
+      await pool.query(`DELETE FROM cat_items WHERE iid=$1`, [id]);
+
+      const placeholders = categories
+        .map((_, i) => `($${i + 2}, $1)`)
+        .join(',');
+      const values = [id, ...categories];
+
+      await pool.query(
+        `INSERT INTO cat_items (cid, iid) VALUES ${placeholders} ON CONFLICT (cid, iid) DO NOTHING;`,
+        values
+      );
+    }
+
+    console.log('Item updated successfully');
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = {
   viewAllCategories,
   viewCategoryDetails,
@@ -91,4 +120,5 @@ module.exports = {
   viewAllItems,
   viewItemDetails,
   addItem,
+  updateItem,
 };

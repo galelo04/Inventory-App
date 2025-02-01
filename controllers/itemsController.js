@@ -7,6 +7,7 @@ const viewItems = async (req, res) => {
 const viewItemDetails = async (req, res) => {
   const { id } = req.params;
   const item = await db.viewItemDetails(id);
+  console.log(item);
   res.render('item', { title: 'Item Details', item });
 };
 const addItemGET = async (req, res) => {
@@ -20,9 +21,30 @@ const addItemPOST = async (req, res) => {
   res.redirect('/items');
 };
 
+const updateItemGET = async (req, res) => {
+  const { id } = req.params;
+  const item = await db.viewItemDetails(id);
+  const categories = await db.viewAllCategories();
+  res.render('updateItem', {
+    title: 'update item',
+    str: JSON.stringify(item),
+    item,
+    categories,
+  });
+};
+
+const updateItemPOST = async (req, res) => {
+  const { id } = req.params;
+  const { title, price, quantity, selectedCategories } = req.body;
+  await db.updateItem(id, title, price, quantity, selectedCategories);
+  res.redirect('/items');
+};
+
 module.exports = {
   viewItems,
   viewItemDetails,
   addItemGET,
   addItemPOST,
+  updateItemGET,
+  updateItemPOST,
 };

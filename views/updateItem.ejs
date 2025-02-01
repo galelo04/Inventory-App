@@ -35,20 +35,17 @@
         <button type="button" id="addCategory">Add</button>
         <div id="hiddenInputs"></div>
       </div>
-      <ul id="selectedCategories">
-        <%categories.forEach((category)=>{%>
-        <li><%= category.ctitle%></li>
-        <%})%>
-      </ul>
-      <button type="submit">add</button>
+      <ul id="selectedCategories"></ul>
+      <button type="submit">update</button>
     </form>
 
     <script>
       const selectedCategories = new Set(); // Store unique category IDs
-      categories.forEach((category) => {
+      const item = JSON.parse('<%- str %>');
+      item.categories.forEach((category) => {
         selectedCategories.add(category.cid);
         const li = document.createElement('li');
-        li.textContent = selectedText;
+        li.textContent = category.ctitle;
         document.getElementById('selectedCategories').appendChild(li);
 
         // Create hidden input
@@ -58,6 +55,7 @@
         hiddenInput.value = category.cid;
         document.getElementById('hiddenInputs').appendChild(hiddenInput);
       });
+      console.log(selectedCategories);
 
       document
         .getElementById('addCategory')
@@ -65,8 +63,8 @@
           const select = document.getElementById('categories');
           const selectedValue = select.value;
           const selectedText = select.options[select.selectedIndex].text;
-
-          if (!selectedCategories.has(selectedValue)) {
+          console.log(+selectedValue);
+          if (!selectedCategories.has(+selectedValue)) {
             selectedCategories.add(selectedValue);
 
             // Add item to the displayed list

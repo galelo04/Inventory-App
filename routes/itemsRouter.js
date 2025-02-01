@@ -9,4 +9,7 @@ itemsRouter.get('/:id/get', itemsController.viewItemDetails);
 itemsRouter.get('/new', itemsController.addItemGET);
 itemsRouter.post('/new', itemsController.addItemPOST);
 
+itemsRouter.get('/:id/update', itemsController.updateItemGET);
+itemsRouter.post('/:id/update', itemsController.updateItemPOST);
+
 module.exports = itemsRouter;

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=title%></title>
+  </head>
+  <body>
+    <h1><%=title%></h1>
+    <form action="/items/<%= item.iid %>/update" method="post">
+      <div>
+        <label for="title">item title</label>
+        <input type="text" id="title" name="title" value="<%= item.ititle%>" />
+      </div>
+      <div>
+        <label for="price">item price</label>
+        <input type="number" id="price" name="price" value="<%= item.price%>" />
+      </div>
+      <div>
+        <label for="quantity">item quantity</label>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          value="<%= item.quantity%>"
+        />
+      </div>
+      <div>
+        <label for="categories">item categories</label>
+        <select name="categories" id="categories">
+          <%categories.forEach((category)=>{%>
+          <option value="<%= category.cid%>"><%= category.ctitle%></option>
+          <%})%>
+        </select>
+        <button type="button" id="addCategory">Add</button>
+        <div id="hiddenInputs"></div>
+      </div>
+      <ul id="selectedCategories">
+        <%categories.forEach((category)=>{%>
+        <li><%= category.ctitle%></li>
+        <%})%>
+      </ul>
+      <button type="submit">add</button>
+    </form>
+
+    <script>
+      const selectedCategories = new Set(); // Store unique category IDs
+      categories.forEach((category) => {
+        selectedCategories.add(category.cid);
+        const li = document.createElement('li');
+        li.textContent = selectedText;
+        document.getElementById('selectedCategories').appendChild(li);
+
+        // Create hidden input
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'selectedCategories[]'; // Array-like name for multiple values
+        hiddenInput.value = category.cid;
+        document.getElementById('hiddenInputs').appendChild(hiddenInput);
+      });
+
+      document
+        .getElementById('addCategory')
+        .addEventListener('click', function () {
+          const select = document.getElementById('categories');
+          const selectedValue = select.value;
+          const selectedText = select.options[select.selectedIndex].text;
+
+          if (!selectedCategories.has(selectedValue)) {
+            selectedCategories.add(selectedValue);
+
+            // Add item to the displayed list
+            const li = document.createElement('li');
+            li.textContent = selectedText;
+            document.getElementById('selectedCategories').appendChild(li);
+
+            // Create hidden input
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'selectedCategories[]'; // Array-like name for multiple values
+            hiddenInput.value = selectedValue;
+            document.getElementById('hiddenInputs').appendChild(hiddenInput);
+          }
+        });
+    </script>
+  </body>
+</html>
